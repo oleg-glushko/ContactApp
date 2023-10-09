@@ -1,0 +1,14 @@
+﻿@page "/Contacts/{Id:int}"
+@model ContactApp.Pages.Contacts.ViewModel
+
+<h1>@(Model.Contact.First ?? string.Empty) @(Model.Contact.Last ?? string.Empty)</h1>
+
+<div class="mb-3">
+    <div>Phone: @Model.Contact.Phone</div>
+    <div>Email: @(Model.Contact.Email ?? string.Empty)</div>
+</div>
+
+<p>
+    <a asp-page="/Contacts/Edit" asp-route-id="@Model.Contact.Id" class="btn btn-success">Edit</a>
+    <a asp-page="/Contacts/Index" class="btn btn-secondary">Back</a>
+</p>

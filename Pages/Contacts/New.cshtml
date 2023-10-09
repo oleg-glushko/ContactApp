@@ -1,0 +1,39 @@
+﻿@page
+@model ContactApp.Pages.Contacts.NewModel
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="First"></label>
+                <input type="text" asp-for="First" class="form-control">
+                <span asp-validation-for="First" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Last"></label>
+                <input type="text" asp-for="Last" class="form-control">
+                <span asp-validation-for="Last" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone"></label>
+                <input type="text" asp-for="Phone" class="form-control">
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input type="email" asp-for="Email" class="form-control"
+                       hx-get="/Contacts/CheckEmail" hx-include="this"
+                       hx-trigger="change, keyup delay:200ms changed" hx-target="next .error">
+                <span asp-validation-for="Email" class="text-danger error"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary my-3">Save</button>
+        </form>
+
+
+    </div>
+</div>
+
+<div>
+    <a asp-page="/Contacts/Index" class="btn btn-secondary">Back</a>
+</div>

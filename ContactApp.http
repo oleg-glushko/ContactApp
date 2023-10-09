@@ -1,0 +1,52 @@
+@HostAddress = https://localhost:7275/api/v1
+
+###
+GET {{HostAddress}}/contacts
+Accept: application/json
+
+###
+POST {{HostAddress}}/contacts
+Accept: application/json
+Content-Type: application/json
+
+{
+    "phone": "123-456-7890",
+    "email": "jon@example.com"
+}
+
+###
+POST {{HostAddress}}/contacts
+Accept: application/json
+Content-Type: application/json
+
+{
+    "first": "Joe",
+    "last": "Blow",
+    "phone": "123-456-7890",
+    "email": "joe@example.com"
+}
+
+###
+GET {{HostAddress}}/contacts/1
+Accept: application/json
+
+###
+GET {{HostAddress}}/contacts/12345
+Accept: application/json
+
+###
+PUT {{HostAddress}}/contacts/1
+Accept: application/json
+Content-Type: application/json
+
+{
+    "first": "Jon",
+    "last": "Smith",
+    "phone": "123-456-7890",
+    "email": "jon@example.com"
+}
+
+###
+DELETE {{HostAddress}}/contacts/12345
+Accept: application/json
+

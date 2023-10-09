@@ -1,0 +1,36 @@
+﻿@using ContactApp.Utils;
+
+<div id="archive-ui" hx-target="this" hx-swap="outerHTML">
+    @if (Archiver.Status == ArchiveStatus.Waiting.ToString())
+    {
+        <button class="btn btn-primary"
+                hx-post="/Contacts/Archive">
+            Download Contact Archive
+        </button>
+    }
+
+    @if (Archiver.Status == ArchiveStatus.Running.ToString())
+    {
+        <div hx-get="/Contacts/Archive" hx-trigger="load delay:500ms">
+            Creating Archive...
+        </div>
+        <div class="progress">
+            <div id="archive-progress" class="progress-bar" role="progressbar"
+                 aria-valuenow="@Archiver.Progress"
+                 style="width: @(Archiver.Progress)%"></div>
+        </div>
+    }
+
+    @if (Archiver.Status == ArchiveStatus.Complete.ToString())
+    {
+        <a hx-boost="false" href="/Contacts/Archive/File">
+            Archive Ready! Click here to download. &downarrow;
+        </a>
+        <button class="btn btn-warning ms-4" hx-delete="/Contacts/Archive">Clear Download</button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Archiver Archiver { get; set; } = null!;
+}

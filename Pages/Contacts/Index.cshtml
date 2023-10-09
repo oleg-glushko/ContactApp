@@ -1,0 +1,89 @@
+﻿@page
+@using ContactApp.Utils;
+@using Microsoft.Extensions.Primitives;
+@model ContactApp.Pages.Contacts.IndexModel
+
+@inject IHttpContextAccessor Accessor;
+@inject Archiver Archiver;
+
+@{
+    string SearchTermQueryParameter = "q";
+    var context = Accessor.HttpContext;
+    var query = context?.Request.Query[SearchTermQueryParameter];
+}
+
+@(await Html.RenderComponentAsync<ArchiveUI>(RenderMode.Static, new { Archiver = Archiver }))
+
+<div class="mb-3">
+    <form method="get">
+        <label for="search">Search Term</label>
+        <input id="search" type="search" name="@SearchTermQueryParameter" value="@query" placeholder="Search Contacts"
+            hx-get="/Contacts", hx-trigger="keyup delay:500ms changed" hx-indicator="#spinner"
+            hx-target="tbody" hx-select="tbody tr" hx-push-url="true"
+            _="on keydown[altKey and code is 'KeyS'] from window me.focus()"
+            />
+        <img id="spinner" class="htmx-indicator" src="/img/spinning-circles.svg" alt="Request In Flight..." />
+        <input type="submit" class="btn btn-secondary" value="Search" />
+    </form>
+</div>
+
+<div class="mb-3">
+    <form x-data="{ selected: [] }">
+        <template x-if="selected.length > 0">
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger"
+                        x-on:click="sweetConfirm($el, 'Delete these contacts', 'Delete')"
+                        x-on:confirmed="htmx.ajax('DELETE', '/Contacts', { source: $root, target: 'main' })">
+                    Delete (<span x-text="selected.length"></span>)
+                </button>
+                <button type="button" class="btn btn-secondary" x-on:click="selected = []">Cancel</button>
+            </div>
+        </template>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <partial name="_Rows" for="@Model.Contacts" />
+                @if (Model.Contacts.Count == 10)
+                {
+                    <tr>
+                        <td colspan="5" style="text-align: center">
+                            <span class="btn btn-secondary"
+                                    hx-target="closest tr"
+                                    @* hx-trigger="revealed" *@
+                                    hx-swap="outerHTML"
+                                    hx-select="tbody > tr"
+                                    hx-get="/Contacts?PageNumber=@(Model.PageNumber + 1)">
+                                Load More
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<div>
+    <p>
+        <a asp-page="/Contacts/New" class="btn btn-success">Add Contact</a>
+        &nbsp;
+        <span hx-get="/Contacts/Count" hx-trigger="load">
+            <img src="/img/spinning-circles.svg" />
+        </span>
+
+    </p>
+</div>
+
+<script>
+    htmx.config
+</script>
