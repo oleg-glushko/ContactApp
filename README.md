@@ -1,0 +1,1 @@
+It's a result of playing around with Razor Pages and htmx. I tried to keep this app close to the "[Hypermedia Systems](https://hypermedia.systems/)" book's Flask examples. You have to apply EF Core migrations before starting a web server. See instructions in the [official documentation](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying).
